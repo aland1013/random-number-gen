@@ -1,14 +1,10 @@
 pragma solidity ^0.5.0;
 
-/*
-                                  Insert Code Snippet 1 Here
-*/
+import './Ilighthouse.sol';
 
 contract Gamble {
 
-  /*
-                                    Insert Code Snippet 2 Here
-  */
+    ILighthouse public myLighthouse;
 
     address[20] public accounts;             // Array of users registered
     uint public numAccounts = 0;             // Should be <= 19, this holds number of registered users
@@ -17,9 +13,9 @@ contract Gamble {
     mapping(address => uint) public toBet;        // Holds ether users have decided to gamble on an upcoming dice roll
     mapping(address => uint) public chosenNumber; // Holds the users chosen number to bet on in an upcoming dice roll
 
-  /*
-                                    Insert Code Snippet 3 Here
-  */
+    constructor(ILighthouse _myLighthouse) public {
+        myLighthouse = _myLighthouse;
+    }
 
 // Pass in sender address manually because truffle proxy contracts interfer with msg.sender
     function deposit(address msgSender) external payable {
@@ -88,9 +84,9 @@ contract Gamble {
 // Rolls the dice for all players who bet on this round, giving a 6x return if they win
     function diceRoll() public {
 
-  /*
-                                    Insert Code Snippet 4 Here
-  */
+      uint winningNumber;
+      bool ok;
+      (winningNumber, ok) = myLighthouse.peekData();
 
       for(uint i = 0; i < numAccounts; i++){
         if( toBet[accounts[i]] != 0 && chosenNumber[accounts[i]] == winningNumber){
